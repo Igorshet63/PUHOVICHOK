@@ -1,11 +1,7 @@
 /* === 1. ПОДКЛЮЧЕНИЕ ШРИФТОВ И СБРОС СТИЛЕЙ === */
-/* Используем Playfair Display и Roboto, как в catalog.html */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Roboto:wght@400;500;700&display=swap');
-/* Font Awesome (иконки) */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
-/* Animate.css (анимации) */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
-/* Swiper CSS (слайдер на главной) */
 @import url('https://unpkg.com/swiper/swiper-bundle.min.css'); 
 
 /* === ПЕРЕМЕННЫЕ ЦВЕТА (LIGHT MODE - DEFAULT) === */
@@ -14,7 +10,7 @@
     --color-bg-secondary: #FFFFFF; /* Фон блоков/шапки/футера */
     --color-text-primary: #2D2D2D; /* Основной текст */
     --color-text-secondary: #5C5C5C; /* Дополнительный текст */
-    --color-accent: #C850C0; /* Акцент (Розово-фиолетовый, из catalog.html) */
+    --color-accent: #C850C0; /* Акцент */
     --color-accent-hover: #9F4099; /* Акцент при наведении */
     --color-shadow: rgba(0, 0, 0, 0.1);
     --font-heading: 'Playfair Display', serif;
@@ -36,6 +32,9 @@
 
 /* === ОБЩИЕ СТИЛИ === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+    overflow-x: hidden;
+}
 
 body {
     font-family: var(--font-body);
@@ -62,7 +61,6 @@ a:hover { color: var(--color-accent-hover); }
     z-index: 1000;
     transition: background-color 0.4s;
 }
-/* Делаем header в каталоге sticky, чтобы он не перекрывал контент при скролле */
 .catalog-page .header { position: sticky; } 
 
 .header-content { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
@@ -101,13 +99,21 @@ a:hover { color: var(--color-accent-hover); }
 }
 
 @media (max-width: 768px) {
+    /* 💥 ИСПРАВЛЕНИЕ: Гарантируем, что кнопка видна */
     .menu-toggle {
-        display: block; /* Показываем на мобильных */
+        display: block; 
+        z-index: 1001;
+    }
+
+    /* 💥 ИСПРАВЛЕНИЕ: Выравниваем лого и кнопку на одной линии */
+    .header-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px; 
     }
 
     .nav-menu {
-        /* Начальное состояние: скрыто и позиционировано для выпадания */
-        display: none; 
         position: absolute;
         top: 100%; /* Под хедером */
         left: 0;
@@ -115,12 +121,19 @@ a:hover { color: var(--color-accent-hover); }
         background-color: var(--color-bg-secondary);
         box-shadow: 0 5px 10px var(--color-shadow);
         z-index: 999;
-        padding: 10px 0;
         border-top: 1px solid var(--color-shadow);
+        
+        /* 💥 АНИМАЦИЯ: Скрываем с помощью max-height */
+        max-height: 0; 
+        overflow: hidden; 
+        transition: max-height 0.4s ease-in-out; 
+        padding: 0;
     }
 
     .nav-menu.active {
-        display: block; /* Показываем при активном состоянии */
+        /* 💥 АНИМАЦИЯ: Показываем, устанавливая большую max-height */
+        max-height: 300px; 
+        padding: 10px 0;
     }
 
     .nav-menu ul {
@@ -150,7 +163,6 @@ section {
 }
 
 .main-content {
-    /* Отступ для каталога, чтобы контент не был под фиксированным header */
     padding-top: 120px; 
     padding-bottom: 80px;
 }
@@ -194,7 +206,6 @@ h2 {
     text-align: center;
     position: relative;
     padding-top: 80px; 
-    /* Используем предоставленное изображение Aivengo_11.png */
     background: url('images/Aivengo_11.png') center center / cover no-repeat;
     color: var(--color-white);
 }
@@ -226,7 +237,6 @@ h2 {
 .card-title-group {
     display: flex;
     align-items: center;
-    /* Устанавливаем общий отступ для группы */
     margin-bottom: 15px; 
 }
 
@@ -234,7 +244,6 @@ h2 {
     color: var(--color-accent);
     font-family: var(--font-heading);
     font-size: 28px;
-    /* Убираем отступ, который теперь задается в .card-title-group */
     margin-bottom: 0; 
     margin-right: 10px; /* Отступ от иконки */
 }
@@ -278,7 +287,7 @@ h2 {
 
 .contacts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
 .contact-info p { font-size: 18px; margin-bottom: 15px; }
-.contact-info a { color: var(--color-text-primary); font-weight: 600; } /* Убираем акцент для контактов */
+.contact-info a { color: var(--color-text-primary); font-weight: 600; } 
 .map-container { height: 400px; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px var(--color-shadow); }
 
 
@@ -295,7 +304,6 @@ h2 {
 }
 
 .product-grid {
-    /* Используем minmax для гибкости на всех экранах */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
     gap: 30px;
@@ -469,7 +477,6 @@ h2 {
 /* Медиа-запрос для маленьких экранов (Смартфоны) */
 @media (max-width: 768px) {
     .header-content { 
-        /* Выравниваем логотип и кнопку меню */
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
@@ -478,13 +485,12 @@ h2 {
     
     h2 { font-size: 32px; margin-bottom: 40px; }
     section { padding: 60px 0; }
-    .hero { height: 70vh; } /* Уменьшаем высоту HERO */
+    .hero { height: 70vh; } 
     .hero-content { padding: 0 15px; }
     .hero h1 { font-size: 42px; }
     .hero p { font-size: 18px; margin-bottom: 30px; }
     .btn { padding: 12px 30px; }
 
-    /* Раскладка на 1 колонку */
     .directions-grid, 
     .contacts-grid { grid-template-columns: 1fr; }
     .benefits-grid { flex-direction: column; align-items: center; }
