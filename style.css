@@ -89,6 +89,59 @@ a:hover { color: var(--color-accent-hover); }
     border-bottom: 2px solid var(--color-accent);
 }
 
+/* --- Мобильное меню (гамбургер) --- */
+.menu-toggle {
+    display: none; /* Скрываем по умолчанию */
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--color-text-primary);
+    background: none;
+    border: none;
+    padding: 5px;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* Показываем на мобильных */
+    }
+
+    .nav-menu {
+        /* Начальное состояние: скрыто и позиционировано для выпадания */
+        display: none; 
+        position: absolute;
+        top: 100%; /* Под хедером */
+        left: 0;
+        width: 100%;
+        background-color: var(--color-bg-secondary);
+        box-shadow: 0 5px 10px var(--color-shadow);
+        z-index: 999;
+        padding: 10px 0;
+        border-top: 1px solid var(--color-shadow);
+    }
+
+    .nav-menu.active {
+        display: block; /* Показываем при активном состоянии */
+    }
+
+    .nav-menu ul {
+        flex-direction: column;
+        padding: 0;
+        text-align: center;
+    }
+    
+    .nav-menu li {
+        margin: 10px 0;
+    }
+
+    .nav-menu a {
+        display: block; /* Занимает всю ширину */
+        padding: 10px 0;
+        font-size: 18px;
+    }
+}
+/* --- Конец Мобильного меню --- */
+
+
 /* === СЕКЦИИ И ЗАГОЛОВКИ === */
 section {
     padding: 100px 0;
@@ -209,6 +262,11 @@ h2 {
 .slider-section { padding-bottom: 100px; }
 .swiper-container { width: 100%; height: 500px; }
 .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
+/* Улучшаем адаптивность Swiper */
+@media (max-width: 768px) {
+    .swiper-container { height: 300px; }
+}
+
 .swiper-button-next, .swiper-button-prev { color: var(--color-text-primary) !important; opacity: 0.8; transition: opacity 0.3s; }
 .swiper-button-next:hover, .swiper-button-prev:hover { opacity: 1; color: var(--color-accent) !important; }
 .swiper-pagination-bullet-active { background: var(--color-accent) !important; }
@@ -237,8 +295,9 @@ h2 {
 }
 
 .product-grid {
+    /* Используем minmax для гибкости на всех экранах */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
     gap: 30px;
 }
 
@@ -258,6 +317,10 @@ h2 {
 }
 
 .product-card img { width: 100%; height: 400px; object-fit: cover; }
+@media (max-width: 600px) {
+    .product-card img { height: 300px; } /* Уменьшаем высоту изображения на узких экранах */
+}
+
 
 .card-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
 
@@ -392,16 +455,45 @@ h2 {
 .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
 
 
-/* === АДАПТИВНОСТЬ === */
+/* === АДАПТИВНОСТЬ Улучшенная === */
+/* Медиа-запрос для экранов среднего размера (Планшеты) */
+@media (max-width: 1024px) {
+    h2 { font-size: 38px; margin-bottom: 50px; }
+    section { padding: 80px 0; }
+    .hero h1 { font-size: 54px; }
+    .hero p { font-size: 20px; }
+    .directions-grid { gap: 20px; }
+    .contacts-grid { gap: 30px; }
+}
+
+/* Медиа-запрос для маленьких экранов (Смартфоны) */
 @media (max-width: 768px) {
-    .directions-grid { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 48px; }
-    .contacts-grid { grid-template-columns: 1fr; }
-    .header-content { flex-direction: column; }
-    .nav-menu ul { padding: 10px 0 0; }
-    .nav-menu li { margin: 0 10px; }
+    .header-content { 
+        /* Выравниваем логотип и кнопку меню */
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px; 
+    }
     
-    .product-grid { grid-template-columns: 1fr; }
-    h2 { font-size: 32px; }
-    .modal-content { margin: 5% auto; }
+    h2 { font-size: 32px; margin-bottom: 40px; }
+    section { padding: 60px 0; }
+    .hero { height: 70vh; } /* Уменьшаем высоту HERO */
+    .hero-content { padding: 0 15px; }
+    .hero h1 { font-size: 42px; }
+    .hero p { font-size: 18px; margin-bottom: 30px; }
+    .btn { padding: 12px 30px; }
+
+    /* Раскладка на 1 колонку */
+    .directions-grid, 
+    .contacts-grid { grid-template-columns: 1fr; }
+    .benefits-grid { flex-direction: column; align-items: center; }
+    .benefit-item { margin-bottom: 30px; }
+    
+    .map-container { height: 300px; }
+    
+    .main-content { padding-top: 100px; padding-bottom: 60px; }
+    .category-block h3 { font-size: 28px; margin-bottom: 30px; }
+    .modal-content { margin: 20% auto; padding: 20px; }
+    .theme-toggle { bottom: 15px; right: 15px; width: 45px; height: 45px; font-size: 18px; }
 }
