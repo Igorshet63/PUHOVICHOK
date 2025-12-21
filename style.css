@@ -133,11 +133,11 @@ h2 {
 
 /* === БЛОК ПРЕИМУЩЕСТВА И ОТЗЫВЫ (ОБНОВЛЕНО) === */
 .benefits {
-    padding-top: 40px; /* Поднято выше к границе блока */
+    padding-top: 60px; /* Поднято выше к границе блока */
 }
 
 .benefits-top {
-    margin-bottom: 80px;
+    margin-bottom: 30px;
 }
 
 .benefits-grid {
@@ -148,23 +148,23 @@ h2 {
 }
 
 .benefit-item i {
-    font-size: 45px;
+    font-size: 35px;
     color: var(--color-accent); /* Цвет как у кнопок */
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .benefit-item h4 {
     font-family: var(--font-heading);
     font-size: 24px;
     color: var(--color-accent); /* Цвет как у кнопок */
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .section-divider {
     border: 0;
     height: 1px;
     background: var(--color-shadow);
-    margin: 40px 0 80px;
+    margin: 20px 0 20px;
 }
 
 /* Отзывы */
@@ -172,7 +172,7 @@ h2 {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 колонки */
     gap: 30px;
-    margin-bottom: 50px;
+    margin-bottom: 15px;
 }
 
 .review-card {
