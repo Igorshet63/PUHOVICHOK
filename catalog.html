@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>КАТАЛОГ — ПУХОВИЧОК & ЛЕДИ</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="style.css">
-
 </head>
 <body id="catalog-body" class="catalog-page">
 
@@ -25,6 +25,7 @@
             </button>
         </div>
     </header>
+    
     <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">
         <i class="fas fa-sun"></i> 
     </button>
@@ -33,45 +34,43 @@
         <div class="container">
             <h2 class="animate-on-scroll">ПОЛНЫЙ КАТАЛОГ ПРОДУКЦИИ</h2>
             
-            <div class="category-block" id="puhovichok-catalog">
+            <div class="category-block">
                 <h3 class="animate-on-scroll">ПУХОВИЧОК (Верхняя одежда)</h3>
                 <div class="product-grid" id="outerwear-grid">
                     </div>
             </div>
             
-            <div class="category-block" id="ledi-catalog">
-                <h3 class="animate-on-scroll">ЛЕДИ (Повседневная и нарядная одежда)</h3>
+            <div class="category-block">
+                <h3 class="animate-on-scroll">ЛЕДИ (Повседневная одежда)</h3>
                 <div class="product-grid" id="regular-wear-grid">
                     </div>
             </div>
-            
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="container">
-            <p>© 2025 ПУХОВИЧОК & ЛЕДИ. Все права защищены. | 
-                <a href="#">Политика конфиденциальности</a>
-            </p>
-        </div>
-    </footer>
-    
     <div id="productModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn">×</span>
-            <h4 id="modalProductName">Название Товара</h4>
-            
-            <div class="modal-details">
-                <strong>Характеристики:</strong>
+            <span class="close-btn">&times;</span>
+            <h2 id="modalProductName">Название товара</h2>
+            <div class="modal-body">
+                <p><strong>Характеристики:</strong></p>
                 <p id="modalProductChars"></p>
+                <p style="margin-top: 15px;"><strong>Доступные размеры:</strong></p>
+                <div id="modalProductSizes" class="sizes-list"></div>
                 
-                <strong>Доступные размеры:</strong>
-                <div class="size-options" id="modalProductSizes">
-                    </div>
+                <a href="https://t.me/your_account" class="btn" style="display: block; text-align: center; margin-top: 25px;">
+                   <i class="fab fa-telegram-plane"></i> Заказать в Telegram
+                </a>
             </div>
-            </div>
+        </div>
     </div>
-    
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 ПУХОВИЧОК & ЛЕДИ. Все права защищены.</p>
+        </div>
+    </footer>
+
     <script src="products.js"></script>
     <script src="script.js"></script>
 </body>
