@@ -16,34 +16,41 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
 });
 
-// === ЛОГИКА МОБИЛЬНОГО МЕНЮ ===
+// === ЛОГИКА МОБИЛЬНОГО МЕНЮ (ИСПРАВЛЕНО) ===
 function initMobileMenu() {
     const menuToggleBtn = document.getElementById('menuToggleBtn');
     const mainNav = document.getElementById('mainNav');
+    
     if (!menuToggleBtn || !mainNav) return;
 
+    // Иконка гамбургера/закрытия
     const menuIcon = menuToggleBtn.querySelector('i');
 
     menuToggleBtn.addEventListener('click', () => {
+        // Используем classList.toggle('active') для переключения состояния и запуска анимации
         const isMenuOpen = mainNav.classList.toggle('active');
-        // Исправлено: переключение иконок
-        menuIcon.classList.toggle('fa-bars', !isMenuOpen);
-        menuIcon.classList.toggle('fa-times', isMenuOpen);
+        
+        // Переключаем иконку (fa-bars <-> fa-times)
+        menuIcon.classList.remove(isMenuOpen ? 'fa-bars' : 'fa-times');
+        menuIcon.classList.add(isMenuOpen ? 'fa-times' : 'fa-bars');
         menuToggleBtn.setAttribute('aria-expanded', isMenuOpen);
     });
     
+    // Закрытие меню при клике на ссылку
     const navLinks = mainNav.querySelectorAll('a');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
+            // Если меню открыто, закрываем его
             if (mainNav.classList.contains('active')) {
                 mainNav.classList.remove('active');
-                menuIcon.classList.add('fa-bars');
                 menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
                 menuToggleBtn.setAttribute('aria-expanded', false);
             }
         });
     });
 }
+// ------------------------------------------
 
 // === ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ ===
 function initThemeToggle() {
@@ -63,6 +70,9 @@ function initThemeToggle() {
     if (currentTheme === 'dark') {
         targetBody.classList.add('dark-mode');
         updateIcon(true);
+    } else {
+        targetBody.classList.remove('dark-mode');
+        updateIcon(false);
     }
 
     toggleButton.addEventListener('click', () => {
@@ -72,9 +82,58 @@ function initThemeToggle() {
     });
 }
 
-// === ЛОГИКА КАТАЛОГА ===
+
+// === ЛОГИКА АНИМАЦИИ ПРИ ПРОКРУТКЕ ===
+function initScrollAnimations() {
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    
+    if (!('IntersectionObserver' in window)) return;
+
+    scrollObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        rootMargin: '0px',
+        threshold: 0.1 
+    });
+
+    elements.forEach(el => scrollObserver.observe(el));
+}
+
+// === ЛОГИКА SWIPER SLIDER (только для index.html) ===
+function initSwiper() {
+    const swiper = new Swiper('.swiper-container', {
+        loop: true,
+        grabCursor: true, // Добавит иконку "руки" при наведении
+        centeredSlides: true,
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        // Гарантируем корректное поведение при изменении размеров окна
+        observer: true,
+        observeParents: true,
+    });
+}
+
+// ===================================
+// === ЛОГИКА КАТАЛОГА (catalog.html) ===
+// ===================================
+
+// ГЕНЕРАЦИЯ КАРТОЧЕК ТОВАРОВ
 function createProductCard(product) {
-    // Добавлен onclick для вызова модального окна
     return `
         <div class="product-card animate-on-scroll" data-product-id="${product.id}">
             <img src="${product.img}" alt="${product.name}">
@@ -83,7 +142,7 @@ function createProductCard(product) {
                 <p>${product.description}</p>
                 <div class="card-footer">
                     <strong>${product.price} ₽</strong>
-                    <button class="price-btn" onclick="openModal(${product.id})">Заказать</button>
+                    <button class="price-btn">Заказать</button>
                 </div>
             </div>
         </div>
@@ -93,8 +152,10 @@ function createProductCard(product) {
 function renderProducts() {
     const outerwearGrid = document.getElementById('outerwear-grid');
     const regularWearGrid = document.getElementById('regular-wear-grid');
+
     if (!outerwearGrid || !regularWearGrid) return;
     
+    // Очистка перед рендерингом
     outerwearGrid.innerHTML = '';
     regularWearGrid.innerHTML = '';
 
@@ -110,11 +171,14 @@ function renderProducts() {
     });
 }
 
+// ЛОГИКА МОДАЛЬНОГО ОКНА
 function initCatalogModal() {
     const modal = document.getElementById('productModal');
     const closeModalBtn = document.querySelector('.close-btn');
-    if (!modal || !closeModalBtn) return;
 
+    if (!modal || !closeModalBtn || typeof products === 'undefined') return;
+
+    // Открытие модального окна и заполнение данными
     window.openModal = function(productId) {
         const product = products.find(p => p.id === productId);
         if (!product) return;
@@ -125,44 +189,25 @@ function initCatalogModal() {
         const sizesContainer = document.getElementById('modalProductSizes');
         sizesContainer.innerHTML = '';
         
+        // Рендерим размеры как некликабельные span'ы
         product.sizes.forEach(size => {
             const sizeItem = document.createElement('span'); 
-            sizeItem.className = 'size-item';
+            sizeItem.className = 'size-item'; // Используем класс для статического отображения
             sizeItem.textContent = size;
             sizesContainer.appendChild(sizeItem);
         });
 
-        modal.style.display = 'flex'; // Используем flex для центрирования
-    };
+        modal.style.display = 'block';
+    }
 
-    closeModalBtn.onclick = () => modal.style.display = 'none';
-    window.onclick = (event) => { if (event.target == modal) modal.style.display = 'none'; };
-}
+    // Закрытие модального окна
+    closeModalBtn.onclick = function() {
+        modal.style.display = 'none';
+    }
 
-// === ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (Scroll, Swiper) ===
-function initScrollAnimations() {
-    const elements = document.querySelectorAll('.animate-on-scroll');
-    if (!('IntersectionObserver' in window)) return;
-
-    const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                scrollObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
-
-    elements.forEach(el => scrollObserver.observe(el));
-}
-
-function initSwiper() {
-    if (typeof Swiper !== 'undefined') {
-        new Swiper('.swiper-container', {
-            loop: true,
-            autoplay: { delay: 3500 },
-            pagination: { el: '.swiper-pagination', clickable: true },
-            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-        });
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
     }
 }
